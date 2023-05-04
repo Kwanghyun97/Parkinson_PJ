@@ -9,6 +9,7 @@ from utils import load_data
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+import numpy as np
 from plotly.subplots import make_subplots
 
 
@@ -32,83 +33,6 @@ def load_data():
     target = target.rename(columns={'upd23b_clinical_state_on_medication': 'medication'})
 
     return target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test
-
-def show_chart(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test):
-    # Set data source column for each dataset
-    target["origin"] = "Clinical Data"
-    sup_target["origin"] = "Supplemental Data"
-
-    # Combine data
-    combined = pd.concat([target, sup_target]).reset_index(drop=True)
-
-    # Create plot
-    fig = px.histogram(combined, x="visit_month", color="origin", nbins=30,
-                       marginal="box", histnorm="probability density",
-                       template="plotly_white",
-                       labels={"origin": "Data Source"})
-
-    # Update plot layout
-    fig.update_layout(
-        title={
-            'text': "Visit Month by Data Source",
-            'y': 0.95,
-            'x': 0.36,
-            'font': {'color': 'darkblue'}  # 글꼴 색상을 변경
-        },
-        legend_title_text="Data Source"
-    )
-
-    # Update plot traces
-    fig.update_traces(opacity=0.75)
-
-    # Show plot
-    st.plotly_chart(fig)
-
-    st.markdown(":pencil: **Interpret:**\n" 
-    "- As can be seen in the graph above, we can divide the oil price trend into **<span style='color:#F1C40F'>three phases</span>**. The first and last of these, Jan2013-Jul2014 and Jan2015-Jul2107 respectively, show stabilised trends with ups and downs. However, in the second phase, Jul2014-Jan2015, oil prices decrease considerably. \n"
-    "- Now, taking into account the issue of missing values for oil price, we are going to fill them by **<span style='color:#F1C40F'>backward fill technique</span>**. That means filling missing values with next data point (Forward filling means fill missing values with previous data", unsafe_allow_html=True)
-    st.markdown("<hr>", unsafe_allow_html=True)
-
-def clinical_distribution(target, sup_target):
-    target["origin"] = "Clinical Data"
-    sup_target["origin"] = "Supplemental Data"
-
-    combined = pd.concat([target, sup_target]).reset_index(drop=True)
-
-    features = ["updrs_1", "updrs_2", "updrs_3", "updrs_4"]
-    labels = ["UPDRS Part 1", "UPDRS Part 2", "UPDRS Part 3", "UPDRS Part 4"]
-
-    for x, feature in enumerate(features):
-        fig = px.histogram(combined, x=feature, color="origin", marginal="box", template="plotly_white",
-                           labels={"origin": "Data Source", "x": "Score", "y": "Density"})
-
-        hist_data = [target[feature][pd.notna(target[feature])],
-                     sup_target[feature][pd.notna(sup_target[feature])]]
-        group_labels = ["Clinical Data", "Supplemental Data"]
-        colors = ['rgb(255, 0, 0)', 'rgb(0, 0, 255)']
-        bin_size = 0.5
-
-        fig = ff.create_distplot(hist_data, group_labels, bin_size=bin_size,
-                                 curve_type='normal', colors=colors)
-        fig.update_layout(
-            title={
-                'text': "{} Scores by Data Source".format(labels[x]),
-                'y': 0.95,
-                'x': 0.5,
-                'xanchor': 'center',
-                'yanchor': 'top'
-            },
-            xaxis_title="Score",
-            yaxis_title="Density"
-        )
-
-        st.plotly_chart(fig)
-
-def show_chart2(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test):
-    fig = plt.figure(figsize=(20, 10))
-    sns.histplot(data=target, x="visit_month", hue="updrs_1", multiple="stack")
-    plt.title("Updrs_1", loc='center', pad=20, color="darkblue", fontdict={'fontsize': 25, "fontweight": "bold"})
-    st.pyplot(fig)
 
 def run_medication():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -137,7 +61,7 @@ def run_medication():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='dimgray')
+        marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
@@ -160,6 +84,7 @@ def run_medication():
     )
 
     st.plotly_chart(fig)
+
 def run_medication2():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
@@ -175,7 +100,7 @@ def run_medication2():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='cornflowerblue')
+        marker=dict(color='red')
     ))
 
     # updrs_2_OFF
@@ -187,7 +112,7 @@ def run_medication2():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='dimgray')
+        marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
@@ -226,7 +151,7 @@ def run_medication3():
             jitter=0,
             pointpos=0,
             boxmean=True,
-            marker=dict(color='cornflowerblue')
+            marker=dict(color='red')
     ))
 
     # updrs_3_OFF
@@ -238,7 +163,7 @@ def run_medication3():
             jitter=0,
             pointpos=0,
             boxmean=True,
-            marker=dict(color='dimgray')
+            marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
@@ -277,7 +202,7 @@ def run_medication4():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='fuchsia')
+        marker=dict(color='red')
     ))
 
     # updrs_4_OFF
@@ -289,7 +214,7 @@ def run_medication4():
         jitter=0,
         pointpos=0,
         boxmean=True,
-        marker=dict(color='dimgray')
+        marker=dict(color='royalblue')
     ))
 
     fig.update_layout(
@@ -312,7 +237,6 @@ def run_medication4():
     )
 
     st.plotly_chart(fig)
-
 
 def distribution_updrs1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -423,7 +347,61 @@ def distribution_updrs4():
 
     st.plotly_chart(fig)
 
-def create_null_value_pie_charts():
+def create_null_value_pie_charts_1():
+
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+
+    # target 의 결측치 정보를 담은 파생 변수 생성 - > target['null_count']
+    target['null_count'] = target.isnull().sum(axis=1)
+
+    # 위 작업을 train_peptides 데이터 셋에도 적용
+    train_peptides["null_count"] = train_peptides.isnull().sum(axis=1)
+
+    # 위 작업을 train_proteins 데이터 셋에도 적용
+    train_proteins["null_count"] = train_proteins.isnull().sum(axis=1)
+
+    # 위 작업을 supplemental_clinical_data 데이터 셋에도 적용
+    sup_target["null_count"] = sup_target.isnull().sum(axis=1)
+
+    # train_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_train_clinical_data = target.groupby("null_count")["visit_id"].count().to_dict()
+    sorted_counts_train_clinical_data = dict(sorted(counts_train_clinical_data.items()))
+    labels_train_clinical_data = ["{} Null Value(s)".format(k) for k in sorted_counts_train_clinical_data.keys()]
+    values_train_clinical_data = list(sorted_counts_train_clinical_data.values())
+
+    # train_peptides 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_train_peptides = train_peptides.groupby("null_count")["visit_id"].count().to_dict()
+    labels_train_peptides = ["{} Null Value(s)".format(k) for k in counts_train_peptides.keys()]
+    values_train_peptides = list(counts_train_peptides.values())
+
+    # train_proteins 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_train_proteins = train_proteins.groupby("null_count")["visit_id"].count().to_dict()
+    labels_train_proteins = ["{} Null Value(s)".format(k) for k in counts_train_proteins.keys()]
+    values_train_proteins = list(counts_train_proteins.values())
+
+    # supplemental_clinical_data 에 대한 null_count 정보를 담은 딕셔너리 생성
+    counts_supplemental_clinical_data = sup_target.groupby("null_count")["visit_id"].count().to_dict()
+    labels_supplemental_clinical_data = ["{} Null Value(s)".format(k) for k in counts_supplemental_clinical_data.keys()]
+    values_supplemental_clinical_data = list(counts_supplemental_clinical_data.values())
+
+    # pie 차트를 그리는 함수 정의
+    def create_pie_chart(values, labels, title, rotation=0):
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3, rotation=rotation)])
+        fig.update_layout(
+        title=title,
+        font=dict(size=16),
+        width=700,
+        height=500,
+        legend=dict(orientation="h")
+        )
+        return fig
+
+    st.markdown("<h4 style='text-align: center; color: black;'>Train Clinical Data </span>", unsafe_allow_html=True)
+    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, "Train Clinical Data Null Value Analysis", rotation=330)
+    st.plotly_chart(fig1)
+
+
+def create_null_value_pie_charts_2():
 
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
 
@@ -471,17 +449,38 @@ def create_null_value_pie_charts():
         )
         return fig
 
-    st.markdown("<h2 style='text-align: center; color: darkblue;'>Null Value Analysis</span>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: black;'>Train Clinical Data </span>", unsafe_allow_html=True)
-    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, title="Train Clinical Data Null Value Analysis")
-    st.plotly_chart(fig1)
-
     st.markdown("<h4 style='text-align: center; color: black;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
     fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
     st.plotly_chart(fig4)
 
+def null_info():
+    st.markdown(":bulb: **Rows with one null value:**\n"
+    "- If there is a single null value in a row, it is generally confirmed that **<span style='color:#F1C40F'>MEDICATION column</span>** is null. \n"
+    "- The data in the medication column is **<span style='color:#F1C40F'>ON, OFF categorical data</span>** The column checks for **<span style='color:#F1C40F'>medication status.</span>** \n"
+    "- The other two instances of null value counts occur 7 times in UPDRS_3 and 21 times in UPDRS_4. \n"
+    "- Part 3 of the UPDRS assessment is about motor assessment and the minimum score is 0. \n"
+    "- Part 4 of the UPDRS assessment is about exercise complications and again has a minimum score of 0. \n"
+    "- These columns indicate that no assessment was performed **<span style='color:#F1C40F'>This is important because a score of 0 means that the patient was assessed and considered to have a normal response.</span>**",
+    unsafe_allow_html=True)
 
+    st.markdown(":bulb: **Rows with two null value:**\n"
+    "- If a row has two null values, this usually corresponds to **<span style='color:#F1C40F'>UPDRS_4 and MEDICATION.</span>** \n"
+    "- The null values are important here because, as mentioned earlier, valid responses are either on or off, so the evaluation can't be sure whether or not it failed to capture the **<span style='color:#F1C40F'>medication</span>** status. \n"
+    "- Most of the other null value fields occur in UPDRS_4, which is related to motor complications. Other null values occur infrequently in the UPDRS_3 and UPDRS_2 fields. \n"
+    "- Again, UPDRS part 3 is about motor assessment **<span style='color:#F1C40F'>where a null value cannot be assumed to be a score of 0, as 0 represents normal function.</span>** \n"
+    "- In UPDRS part 2, the assessment is about the experience of exercise in daily life, and a null value here could indicate that no assessment was performed. \n",
+    unsafe_allow_html=True)
 
+    st.markdown(":bulb: **Rows with three null value:**\n"
+    "- There are 10 instances where a row contains 3 null values. \n"
+    "- In each instance, the row has no information for UPDRS_3, UPDRS_4, and MEDICATION **<span style='color:#F1C40F'>Again, missing values cannot be assumed to be zero.</span>** \n",
+    unsafe_allow_html=True)
+
+    st.markdown(":bulb: **Rows with four null value:**\n"
+    "- There is only a **<span style='color:#F1C40F'>single</span>** instance of a row with four null values. \n"
+    "- It appears that **<span style='color:#F1C40F'>only the UPDRS Part 3 assessment was performed during the visit.</span>** \n"
+    "- Again, since a 0-based score represents a normal response, **<span style='color:#F1C40F'>null values cannot be interpreted as 0.</span>**",
+    unsafe_allow_html=True)
 
 def run_eda():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -490,10 +489,6 @@ def run_eda():
     st.markdown(
         "<h1 style='text-align: center; color: darkblue;'>Parkinson's </span><span style='text-align: center; color: darkmagenta;'>Exploratory Data Analysis</span>",
         unsafe_allow_html=True)
-    if submenu == 'Charts':
-        show_chart(target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test)
-    else:
-        pass
 
     submenu1 = st.selectbox("⏏️ Updrs-Medication", ['Updrs-Medication 1', 'Updrs-Medication 2', 'Updrs-Medication 3', 'Updrs-Medication 4'])
 
@@ -505,6 +500,10 @@ def run_eda():
         run_medication3()
     elif submenu1 == 'Updrs-Medication 4':
         run_medication4()
+
+    st.markdown(":pencil: **Interpret:**\n"
+    "- In the graph above, we can see that the patients who took the medication increased their **<span style='color:#F1C40F'>scores more slowly</span>** than the patients who did not take the medication. \n",
+    unsafe_allow_html=True)
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
@@ -519,9 +518,32 @@ def run_eda():
     elif submenu2 == 'Updrs-Distribution 4':
         distribution_updrs4()
 
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- UPDRS parts 1 and 4 scores appear **<span style='color:#F1C40F'>to have a fairly similar</span>** distribution between the Train Clinical Data source and the Supplemental Clinical Data source. \n"
+    "- UPDRS part 2 and 3 scores **<span style='color:#F1C40F'>have a much higher percentage of zero-based</span>** scores in the clinical data when compared to the supplemental data source. ",
+    unsafe_allow_html=True)
+
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    create_null_value_pie_charts()
+    submenu3 = st.selectbox("⏏️ Null Value Analysis", ['Train Clinical Data', 'Supplemental Clinical Data'])
+
+    if submenu3 == 'Train Clinical Data':
+        create_null_value_pie_charts_1()
+
+    elif submenu3 == 'Supplemental Clinical Data':
+        create_null_value_pie_charts_2()
+
+    st.markdown(":pencil: **Interpret:**\n"
+                "- There are no missing values in the train_peptides and train_protiens datasets. \n"
+                "- The null values in the data were checked in train_clinical_data and supplemental_clinical_data **<span style='color:#F1C40F'>the analysis of the number of nulls in each row is shown below.</span>** ",
+                unsafe_allow_html=True)
+
+    with st.expander("Rows with null value"):
+        null_info()
+
+    # def plot_correlation_heatmap1()
+
+
 
 
 
