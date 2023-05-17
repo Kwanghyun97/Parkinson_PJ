@@ -1,4 +1,4 @@
-# Parkinson Project (2023.04.24 ~ 2023.05.17)
+# 🔥 Parkinson Project (2023.04.24 ~ 2023.05.17)
 
 [대시보드 링크](https://kwanghyun97-parkinson-pj-app-oc2h0c.streamlit.app/) <br/><br/>
 [발표 영상] <br/><br/>
@@ -51,7 +51,7 @@ Kaggle 에서 제공하는 데이터를 사용하였습니다.
     - 모델 별 SMAPE Score 및 시각화
     - 캐글 최종 제출 Score 및 등수 기재
  
-## 분석 Flow
+## Work Flow
 [PPT 자료 Link](pdf/2조_파킨슨_질병_진단예측.pdf)
 - **프로젝트 팀 구성**
     - 팀구성 및 역활
