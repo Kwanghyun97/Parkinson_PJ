@@ -1,5 +1,4 @@
 # -*- coding:utf-8 -*-
-
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly
@@ -390,57 +389,33 @@ def create_null_value_pie_charts_1():
 
     # pie 차트를 그리는 함수 정의
     def create_pie_chart(values, labels, title, rotation=0):
-        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3, rotation=rotation)])
+        fig = go.Figure(data=[go.Pie(
+            labels=labels,
+            values=values,
+            hole=.3,
+            rotation=rotation,
+            sort=False,
+            hoverinfo='label+value+percent',
+            textinfo='label+percent',
+            marker=dict(
+                colors=sns.color_palette("Set2")[0:len(labels)],
+            ),
+            )])
         fig.update_layout(
-        title=title,
-        font=dict(size=16),
-        width=700,
-        height=500,
-        legend=dict(orientation="h")
+            title=title,
+            font=dict(
+                family="Arial, sans-serif",
+                size=16,
+                color="#7f7f7f"
+            ),
+            width=700,
+            height=500,
+            legend=dict(orientation="v", x=1.05, y=0.5),
+            title_x=0.3 # Add this line to center align the title
         )
         return fig
 
-    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data,
-                            "Train Clinical Data Null Value Analysis", rotation=330)
-
-    fig1.update_layout(
-        title={
-            'text': "Train Clinical Data Null Value Analysis",
-            'y': 0.98,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
-        margin=dict(t=50, b=0),
-        height=600,
-        width=800,
-        xaxis=dict(
-            showline=True,
-            showgrid=True,
-            showticklabels=False,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)',
-            ),
-        ),
-        yaxis=dict(
-            showline=True,
-            showgrid=True,
-            showticklabels=False,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)',
-            ),
-        )
-    )
-
+    fig1 = create_pie_chart(values_train_clinical_data, labels_train_clinical_data, "Train Clinical Data Null Value Analysis", rotation=330)
     st.plotly_chart(fig1)
 
 def create_null_value_pie_charts_2():
@@ -485,59 +460,33 @@ def create_null_value_pie_charts_2():
 
     # pie 차트를 그리는 함수 정의
     def create_pie_chart(values, labels, title, rotation=0):
-        fig = go.Figure(data=[go.Pie(labels=labels, values=values, hole=.3, rotation=rotation)])
+        fig = go.Figure(data=[go.Pie(
+            labels=labels,
+            values=values,
+            hole=.3,
+            rotation=rotation,
+            sort=False,
+            hoverinfo='label+value+percent',
+            textinfo='label+percent',
+            marker=dict(
+                colors=sns.color_palette("Set2")[0:len(labels)],
+            ),
+            )])
         fig.update_layout(
-        title=title,
-        font=dict(size=16),
-        width=700,
-        height=500,
-        legend=dict(orientation="h")
+            title=title,
+            font=dict(
+                family="Arial, sans-serif",
+                size=16,
+                color="#7f7f7f"
+            ),
+            width=700,
+            height=500,
+            legend=dict(orientation="v", x=1.05, y=0.5),
+            title_x=0.3 # Add this line to center align the title
         )
         return fig
 
-    # st.markdown("<h4 style='text-align: center; color: black;'>Supplemental Clinical Data </span>", unsafe_allow_html=True)
-    # fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
-    fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data,
-                            "Train Clinical Data Null Value Analysis", rotation=330)
-
-    fig4.update_layout(
-        title={
-            'text': "Supplemental Clinical Data Null Value Analysis",
-            'y': 0.98,
-            'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'},
-        margin=dict(t=50, b=0),
-        height=600,
-        width=800,
-        xaxis=dict(
-            showline=True,
-            showgrid=True,
-            showticklabels=False,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)',
-            ),
-        ),
-        yaxis=dict(
-            showline=True,
-            showgrid=True,
-            showticklabels=False,
-            linecolor='rgb(204, 204, 204)',
-            linewidth=2,
-            ticks='outside',
-            tickfont=dict(
-                family='Arial',
-                size=12,
-                color='rgb(82, 82, 82)',
-            ),
-        )
-    )
-
+    fig4 = create_pie_chart(values_supplemental_clinical_data, labels_supplemental_clinical_data, "Supplemental Clinical Data Null Value Analysis")
     st.plotly_chart(fig4)
 
 def null_info():
@@ -657,7 +606,7 @@ def protein_cv_1():
 
     fig = px.violin(protein_agg_top5, y='UniProt', x='CV_NPX[%]', color='UniProt',
                     box=True, title='<b>Coeffcient of Variation for NPX (Top 5)',
-                    width=800, height=600)
+                    width=700, height=600)
     fig.update_layout(template='plotly_dark',
                       showlegend=False,
                       xaxis=dict(title='Coeffcient of Variation [%] of NPX per patient_id',
@@ -678,6 +627,51 @@ def protein_cv_1():
     unsafe_allow_html=True)
 
 def protein_cv_2():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    target = target.rename(columns={'upd23b_clinical_state_on_medication': 'medication'})
+    # Calculate coefficient of variation for NPX per UniProt
+    proteins_agg = train_proteins[['patient_id', 'UniProt', 'NPX']]
+    proteins_agg = proteins_agg.groupby(['patient_id', 'UniProt'])['NPX'].aggregate(['mean', 'std'])
+    proteins_agg['CV_NPX[%]'] = proteins_agg['std'] / proteins_agg['mean'] * 100
+    NPX_cv_mean = proteins_agg.groupby('UniProt')['CV_NPX[%]'].mean().reset_index()
+    NPX_cv_mean = NPX_cv_mean.sort_values(by='CV_NPX[%]', ascending=False).reset_index(drop=True)
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt']
+
+    # Get data for top 5 UniProt with highest CV
+    protein_medication = pd.merge(train_proteins, target[['visit_id', 'medication']], on='visit_id', )
+    protein_medication['medication'] = protein_medication['medication'].fillna('Null')
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt'].reset_index(drop=True)
+    tmp = protein_medication[['visit_month', 'patient_id', 'UniProt', 'NPX', 'medication']]
+    top5_protein = tmp.query('UniProt in @protein_cv_top5')
+
+    # Create subplot figure for box plots
+    fig = make_subplots(rows=5, cols=2, horizontal_spacing=0.10, vertical_spacing=0.06,
+                        column_titles=['<b>Medication: On', '<b>Medication: Off of Null'],
+                        shared_yaxes=True)
+    for i, medication in enumerate([['On'], ['Off', 'Null']]):
+        top5_protein_df = top5_protein.query('medication in @medication')
+        for j, protein in enumerate(protein_cv_top5):
+            protein_df = top5_protein_df.query(f'UniProt=="{protein}"')
+            fig.add_trace(go.Box(x=protein_df['visit_month'], y=protein_df['NPX']),
+                          row=j + 1, col=i + 1)
+            fig.update_xaxes(title_text='Visit Month', row=j + 1, col=i + 1)
+            fig.update_yaxes(title_text=f'{protein} NPX', row=j + 1, col=1)
+
+    # Update layout and show plot
+    fig.update_layout(
+        title={
+            'text': "<b>NPX - Visit Month (Highset top5 CV)",
+            'y': 0.99,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20, color='black', family="Arial")
+        },
+        showlegend=False,
+        width=700, height=2000
+    )
+
+    st.plotly_chart(fig)
 
     st.markdown(":pencil: **Interpret:**\n" 
     "- The top five protein coefficient of variation (CV) values and the number of visit months for patients based on whether they were taking medication or not. We don't know from this whether the top 5 protein CVs are correlated with the number of visits, but overall, people on medication have more visits than people off medication or unknown. people who were not on the drug or unknown.",
@@ -697,7 +691,6 @@ def plot_mean_updrs_scores():
     fig.tight_layout()
     st.pyplot(fig)
 
-
 def plot_mean_updrs_scores_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
     grouped_data = target[['visit_month', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']].apply(pd.to_numeric,
@@ -706,7 +699,7 @@ def plot_mean_updrs_scores_1():
     colors = ['#FF5733', '#C70039', '#900C3F', '#581845']
 
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
-    fig.suptitle('Mean Updrs Score_1', fontsize=20, fontweight='bold', x=0.52, y=0.98)
+    fig.suptitle('Mean Updrs Score by Visit Month', fontsize=20, fontweight='bold', x=0.52, y=0.98)
     for i, ax in enumerate(axs.flatten()):
         sns.regplot(x=grouped_data.index, y=grouped_data.iloc[:, i], color=colors[i], ax=ax, label=f'UPDRS {i + 1}')
         target[f'updrs_{i + 1}'] = pd.to_numeric(target[f'updrs_{i + 1}'], errors='coerce')
@@ -716,6 +709,9 @@ def plot_mean_updrs_scores_1():
     fig.tight_layout()
     st.pyplot(fig)
 
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The graph above shows the Mean UPDRS[1-4] scores are **<span style='color:#F1C40F'>increasing</span>** as visit mont progresses, and the data points are heavily clustered at the beginning of visit mont.",
+    unsafe_allow_html=True)
 
 def plot_mean_updrs_scores_2():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -725,7 +721,7 @@ def plot_mean_updrs_scores_2():
     colors = ['#FF5733', '#C70039', '#900C3F', '#581845']
 
     fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(12, 8))
-    fig.suptitle('Mean Updrs Score_2', fontsize=20, fontweight='bold', x=0.52, y=0.98)
+    fig.suptitle('Mean Updrs Score by Visit Month', fontsize=20, fontweight='bold', x=0.52, y=0.98)
     for i, ax in enumerate(axs.flatten()):
         sns.regplot(x=grouped_data.index, y=grouped_data.iloc[:, i], color=colors[i], ax=ax, label=f'UPDRS {i + 1}')
         sup_target[f'updrs_{i + 1}'] = pd.to_numeric(sup_target[f'updrs_{i + 1}'], errors='coerce')
@@ -734,6 +730,264 @@ def plot_mean_updrs_scores_2():
         ax.legend()
     fig.tight_layout()
     st.pyplot(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- In the chart above, the Clinical data shows that Mean UPDRS[1-4] is **<span style='color:#F1C40F'>increasing</span>** as the visit month passes, Supplimental Clinical data shows an increase in Mean UPDRS 1 and Mean UPDRS 2 only.",
+    unsafe_allow_html=True)
+
+def generate_corr_heatmap_protein_clinical():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    merge_protein_clinical = pd.merge(target, train_proteins, on=['patient_id', 'visit_month'])
+    columns = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4', 'UniProt', 'NPX']
+    columns_2 = ['UniProt', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+
+    # 로그 변환 적용 (updrs_4=0인 경우에는 0.1을 더해줌)
+    log_merge_protein_clinical = merge_protein_clinical.copy()
+    num_cols = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+    log_merge_protein_clinical[num_cols] = np.log(merge_protein_clinical[num_cols] + 0.1) * (merge_protein_clinical[num_cols] == 0)
+
+    # 상관계수 계산
+    corr_matrix = log_merge_protein_clinical[columns].groupby('UniProt').corr().reset_index()
+    corr_matrix = corr_matrix[corr_matrix['level_1'] == 'NPX'][columns_2].reset_index(drop=True)
+    corr_matrix = corr_matrix.set_index('UniProt')
+
+    # 상관계수 절댓값 상위 5개 UniProt 추출
+    top_uniprot = corr_matrix.abs().mean(axis=1).sort_values(ascending=False).head(5).index.tolist()
+
+    # 상위 5개 UniProt에 대한 상관계수 행렬 추출
+    top_corr_matrix = corr_matrix.loc[top_uniprot, num_cols]
+
+    # Function to modify NPX label for heatmap annotations
+    def modify_npx_label(npx):
+        if npx < 0.01:
+            return "{:.4f}".format(npx)
+        elif npx < 0.1:
+            return "{:.3f}".format(npx)
+        elif npx < 1:
+            return "{:.2f}".format(npx)
+        else:
+            return "{:.1f}".format(npx)
+
+    # 상관계수 히트맵 생성
+    fig = go.Figure(data=go.Heatmap(
+        z=top_corr_matrix.values,
+        x=top_corr_matrix.columns.tolist(),
+        y=top_corr_matrix.index.tolist(),
+        # Invert colorscale
+        colorscale='sunset_r',
+        colorbar=dict(title='Correlation')
+    ))
+
+    # Add annotations to show correlation values
+    for i in range(len(top_corr_matrix.index)):
+        for j in range(len(top_corr_matrix.columns)):
+            fig.add_annotation(
+                x=top_corr_matrix.columns[j],
+                y=top_corr_matrix.index[i],
+                text=modify_npx_label(top_corr_matrix.iloc[i, j]),
+                showarrow=False,
+                font=dict(color='white' if abs(top_corr_matrix.iloc[i, j]) > 0.5 else 'black')
+            )
+
+    # Set layout
+    fig.update_layout(
+        title={
+            'text': 'Correlation between 4 points with top 5 proteins (log transformed)',
+            'y': 0.93,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+        xaxis={'title': 'Uprdrs[1-4]', 'tickformat': '.2s'},
+        yaxis={'title': 'UniProt', 'tickformat': '.2s'},
+        width=700, height=600,
+    )
+
+    # 출력
+    st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The graph above shows only the top 5 correlation values of UniProt and UPDRS scores, expressed as hit meps. Proteins and peptides were merged with clinical data. The correlation coefficient of the top 5 UniProt had a **<span style='color:#F1C40F'>very weak negative relationship</span>**, and the rest of the UniProt had a very weak negative/positive relationship or almost no correlation.",
+    unsafe_allow_html=True)
+
+def generate_corr_heatmap_peptides_clinical():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    merge_peptides_clinical = pd.merge(target, train_peptides, on=['patient_id', 'visit_month'])
+    columns = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4', 'UniProt', 'PeptideAbundance']
+    columns_2 = ['UniProt', 'updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+
+    # 로그 변환 적용 (updrs_4=0인 경우에는 0.1을 더해줌)
+    log_merge_peptides_clinical = merge_peptides_clinical.copy()
+    num_cols = ['updrs_1', 'updrs_2', 'updrs_3', 'updrs_4']
+    log_merge_peptides_clinical[num_cols] = np.log(merge_peptides_clinical[num_cols] + 0.1) * (merge_peptides_clinical[num_cols] == 0)
+
+    # 상관계수 계산
+    corr_matrix = log_merge_peptides_clinical[columns].groupby('UniProt').corr().reset_index()
+    corr_matrix = corr_matrix[corr_matrix['level_1'] == 'PeptideAbundance'][columns_2].reset_index(drop=True)
+    corr_matrix = corr_matrix.set_index('UniProt')
+
+    # 상관계수 절댓값 상위 5개 UniProt 추출
+    top_uniprot = corr_matrix.abs().mean(axis=1).sort_values(ascending=False).head(5).index.tolist()
+
+    # 상위 5개 UniProt에 대한 상관계수 행렬 추출
+    top_corr_matrix = corr_matrix.loc[top_uniprot, num_cols]
+
+    # 농도 라벨 수정 함수
+    def modify_npx_label(npx):
+        if npx < 0.01:
+            return "{:.4f}".format(npx)
+        elif npx < 0.1:
+            return "{:.3f}".format(npx)
+        elif npx < 1:
+            return "{:.2f}".format(npx)
+        else:
+            return "{:.1f}".format(npx)
+
+    # 상관계수 히트맵 생성
+    fig = go.Figure(data=go.Heatmap(
+        z=top_corr_matrix.values,
+        x=top_corr_matrix.columns.tolist(),
+        y=top_corr_matrix.index.tolist(),
+        # 색상 반전
+        colorscale='sunset_r',  # _r 추가
+        colorbar=dict(title='Correlation')
+    ))
+
+    # 상관계수 값 표시
+    for i in range(len(top_corr_matrix.index)):
+        for j in range(len(top_corr_matrix.columns)):
+            fig.add_annotation(
+                x=top_corr_matrix.columns[j],
+                y=top_corr_matrix.index[i],
+                text=modify_npx_label(top_corr_matrix.iloc[i, j]),
+                showarrow=False,
+                font=dict(color='white' if abs(top_corr_matrix.iloc[i, j]) > 0.5 else 'black')
+            )
+
+    # Set layout
+    fig.update_layout(
+        title={
+            'text': 'Correlation between 4 points with top 5 peptides (log transformed)',
+            'y': 0.93,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top',
+            'font': dict(size=20)
+        },
+        xaxis={'title': 'Uprdrs[1-4]', 'tickformat': '.2s'},
+        yaxis={'title': 'UniProt', 'tickformat': '.2s'},
+        width=700, height=600,
+    )
+
+    # 출력
+    st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The graph above shows only the top 5 correlation values of UniProt and UPDRS scores, expressed as hit meps. Proteins and peptides were merged with clinical data. The correlation coefficient of the top 5 UniProt had a **<span style='color:#F1C40F'>very weak negative relationship</span>**, and the rest of the UniProt had a very weak negative/positive relationship or almost no correlation.",
+    unsafe_allow_html=True)
+
+def visualize_protein_correlation():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    target = target.rename(columns={'upd23b_clinical_state_on_medication':'medication'})
+    # Calculate coefficient of variation for NPX per UniProt
+    proteins_agg = train_proteins[['patient_id','UniProt','NPX']]
+    proteins_agg = proteins_agg.groupby(['patient_id','UniProt'])['NPX'].aggregate(['mean','std'])
+    proteins_agg['CV_NPX[%]'] = proteins_agg['std'] / proteins_agg['mean']*100
+    NPX_cv_mean = proteins_agg.groupby('UniProt')['CV_NPX[%]'].mean().reset_index()
+    NPX_cv_mean = NPX_cv_mean.sort_values(by='CV_NPX[%]', ascending=False).reset_index(drop=True)
+    protein_cv_top5 = NPX_cv_mean[:5]['UniProt']
+
+    num_protein_candidates = 5
+    protein_candidates = NPX_cv_mean.loc[:num_protein_candidates-1, 'UniProt']
+
+    # Create dataframe with columns:['visit_id', 'protein_candidata1', 'protein_candidata2', ...]
+    train_proteins_candidate_df = train_proteins.query(f'UniProt in @protein_candidates')
+    visit_ids = train_proteins['visit_id'].unique()
+    protein_dict_list = []
+    for visit_id in visit_ids:
+        proteins_df = train_proteins_candidate_df.query(f'visit_id=="{visit_id}"')
+        UniProts = proteins_df['UniProt'].values
+        NPXs = proteins_df['NPX'].values
+        protein_dict = dict(zip(protein_candidates, [np.nan]*num_protein_candidates))
+        for UniProt, NPX in zip(UniProts, NPXs):
+            protein_dict[UniProt] = NPX
+        protein_dict['visit_id'] = visit_id
+        protein_dict_list.append(protein_dict)
+
+    protein_candidate_df = pd.DataFrame(protein_dict_list)
+
+    # Concatenate train_clinical_df to protein_candidate_df
+    clinical_protein_df = pd.merge(target,
+                                   protein_candidate_df,
+                                   on='visit_id')
+
+    # Heatmap
+    clinical_protein_df_ = clinical_protein_df.drop(['visit_id', 'patient_id', 'visit_month', 'medication'], axis=1)
+    corr = clinical_protein_df_.corr()
+    fig = px.imshow(corr, width=700, height=600,
+                    title='<b>Correlation: UPDRS scores and Protein NPX</b>',
+                    x=list(corr.columns), y=list(corr.index))
+    fig.update_layout(title_x=0.3, title_y=0.95)
+    st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- We checked the correlation between the UPDRS score and the coefficient of variation (CV) of protein. As shown in the table, there is a correlation between the stages of the UPDRS and the CV of protein.  You can see that the correlation is mostly below 0.2, which is not significant. In UniProt, we can see that P98160 and P30086 are weakly correlated.",
+    unsafe_allow_html=True)
+
+def peptide_cv_1():
+    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
+    # Calculate the coefficient of variation (CV) for PeptideAbundance per patient_ids and Peptides
+    train_peptides_df_agg = train_peptides[['patient_id', 'Peptide', 'PeptideAbundance']]
+    train_peptides_df_agg = train_peptides_df_agg.groupby(['patient_id', 'Peptide'])['PeptideAbundance']\
+                            .aggregate(['mean', 'std'])
+    train_peptides_df_agg['CV_PeptideAbundance[%]'] = \
+        train_peptides_df_agg['std'] / train_peptides_df_agg['mean'] * 100
+    # Mean CV value of Peptides
+    abundance_cv_mean = train_peptides_df_agg.groupby('Peptide')['CV_PeptideAbundance[%]'].mean().reset_index()
+    abundance_cv_mean = abundance_cv_mean.sort_values(
+        by='CV_PeptideAbundance[%]', ascending=False).reset_index(drop=True)
+    peptide_cv_top5 = abundance_cv_mean[:5]['Peptide']
+
+    train_peptides_df_agg_top5 = train_peptides_df_agg.query('Peptide in @peptide_cv_top5').reset_index()
+    # Sort by peptide_cv_top5 rank
+    train_peptides_df_agg_top5['order'] = 0
+    for i, peptide in enumerate(peptide_cv_top5):
+        index = train_peptides_df_agg_top5.query(f'Peptide=="{peptide}"').index
+        train_peptides_df_agg_top5.loc[index, 'order'] = i
+    train_peptides_df_agg_top5.sort_values(by='order', inplace=True)
+
+    fig = px.violin(train_peptides_df_agg_top5,
+                    y='Peptide',
+                    x='CV_PeptideAbundance[%]',
+                    color='Peptide',
+                    box=True,
+                    title='<b>Coefficient of Variation (Top 5) of PeptideAbundance per patient_id</b>',
+                    width=700,
+                    height=600)
+    fig.update_layout(width=700,
+                      height=600,
+                      showlegend=False,
+                      xaxis=dict(title='Coefficient of variation [%] for PeptideAbundance per patient_id'),
+                      yaxis=dict(title='<b>Peptide</b>'))
+    fig.update_layout(title_x=0.2, title_y=0.9)
+    st.plotly_chart(fig)
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- Group by patient_id and peptide columns and get the mean and standard deviation of PeptideAbundance. Then use the standard deviation and mean value to get the coefficient of variation (CV) value. List only the top 5 peptide sequences with the highest CV values. The higher the value in the graph, the greater the abundance variation of the peptide.",
+    unsafe_allow_html=True)
+
+def peptide_cv_2():
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- The top five peptide coefficient of variation (CV) values and the number of months of visits for patients based on whether they were taking medication. This doesn't tell us if the top 5 peptide CVs are correlated with the number of visits, but overall, we can see that people on medication have more visits than people who are not on medication or whose CVs are unknown.",
+    unsafe_allow_html=True)
+def peptide_cv_3():
+
+    st.markdown(":pencil: **Interpret:**\n" 
+    "- We correlated the UPDRS scores with the coefficient of variation (CV) of the peptides. As shown in the table, there is a correlation between the stages of the UPDRS, but not with the CV of the peptide. You can see that the correlation is mostly below 0.1 and has no effect.",
+    unsafe_allow_html=True)
+
 
 def submenu_1():
     target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
@@ -781,11 +1035,11 @@ def submenu_1():
 
 
 def submenu_2():
-    submenu = st.selectbox("⏏️ Mean UDPRS Score", ['Mean_Updrs_Scores_1', 'Mean_Updrs_Scores_2'])
+    submenu = st.selectbox("⏏️ Mean UDPRS Score by Visit Month", ['Train Clinical Data', 'Supplemental Clinical Data'])
 
-    if submenu == 'Mean_Updrs_Scores_1':
+    if submenu == 'Train Clinical Data':
         plot_mean_updrs_scores_1()
-    elif submenu == 'Mean_Updrs_Scores_2':
+    elif submenu == 'Supplemental Clinical Data':
         plot_mean_updrs_scores_2()
 
 def submenu_3():
@@ -886,39 +1140,33 @@ def submenu2_2():
 
 
 def submenu2_3():
-    target, sup_target, train_peptides, train_proteins, test_peptides, test_proteins, sample_submission, test = load_data()
-    merge_protein_clinical = pd.merge(target, train_proteins, on=['patient_id', 'visit_month'])
+    submenu = st.selectbox("⏏️ Correlation between proteins and UPDRS scores (top 5 proteins)",
+                           ['Correlation between 4 points with top 5 proteins_1', 'Correlation between 4 points with top 5 peptides_2'])
 
-    columns = ['updrs_1', 'updrs_2',
-               'updrs_3', 'updrs_4', 'UniProt', 'NPX']
-    columns_2 = ['UniProt', 'updrs_1', 'updrs_2',
-                 'updrs_3', 'updrs_4']
-    corr_matrix = merge_protein_clinical[columns].groupby('UniProt').corr().reset_index()
-    corr_matrix = corr_matrix[corr_matrix['level_1'] == 'NPX'][columns_2].reset_index(drop=True)
-    corr_matrix = corr_matrix.set_index('UniProt')
-
-    for index in range(0, corr_matrix.T.shape[1], 15):
-        fig = px.imshow(corr_matrix.T.iloc[:, index:index + 15], text_auto=True, color_continuous_scale='sunset')
-        fig.update_layout(
-            title={
-                'text': 'Correlation between 4 points with proteins',
-                'y': 0.99,
-                'x': 0.5,
-                'xanchor': 'center',
-                'yanchor': 'top',
-                'font': dict(size=20)
-            },
-        )
-
-        st.plotly_chart(fig)
+    if submenu == 'Correlation between 4 points with top 5 proteins_1':
+        generate_corr_heatmap_protein_clinical()
+    elif submenu == 'Correlation between 4 points with top 5 peptides_2':
+        generate_corr_heatmap_peptides_clinical()
 
 def submenu2_4():
-    submenu = st.selectbox("⏏️ Protein CV", ['Protein CV', 'Protein CV & upd23b_clinical_state_on_medication'])
+    submenu = st.selectbox("⏏️ Protein CV", ['Protein CV Top 5', 'Protein NPX & Visit Month (Top 5)', 'Correlation : UPDRS scores & Protein NPX'])
 
-    if submenu == 'Protein CV':
+    if submenu == 'Protein CV Top 5':
         protein_cv_1()
-    elif submenu == 'Protein CV & upd23b_clinical_state_on_medication':
+    elif submenu == 'Protein NPX & Visit Month (Top 5)':
         protein_cv_2()
+    elif submenu == 'Correlation : UPDRS scores & Protein NPX':
+        visualize_protein_correlation()
+
+def submenu2_5():
+    submenu = st.selectbox("⏏️ Peptide CV", ['Peptde CV Top 5', 'Peptide Abundance & Visit Month (Top 5)', 'Correlation : UPDRS scores & Peptides Abundance'])
+
+    if submenu == 'Peptde CV Top 5':
+        peptide_cv_1()
+    elif submenu == 'Peptide Abundance & Visit Month (Top 5)':
+        peptide_cv_2()
+    elif submenu == 'Correlation : UPDRS scores & Peptides Abundance':
+        peptide_cv_3()
 
 def run_eda():
     st.markdown(
@@ -943,11 +1191,11 @@ def run_eda():
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_2()
         st.write('<hr>', unsafe_allow_html=True)
-        # submenu2_3()
+        submenu2_3()
         st.write('<hr>', unsafe_allow_html=True)
         submenu2_4()
-
-
+        st.write('<hr>', unsafe_allow_html=True)
+        submenu2_5()
 
 
 
