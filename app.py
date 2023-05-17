@@ -73,9 +73,9 @@ def main():
         # Link
         c1, c2, c3 = st.columns(3)
         with c1:
-            st.info('**Data Analyst: [@Sung](https://muhanyuljung.tistory.com/)**', icon="💡")
+            st.info('**Data Analyst: [@Kawng](https://techtalkwithkwanghyun.tistory.com/)**', icon="💡")
         with c2:
-            st.info('**GitHub: [@MST](https://github.com/MoonStyIe/Parkinson)**', icon="💻")
+            st.info('**GitHub: [@MST](https://github.com/Kwanghyun97/Parkinson_PJ/blob/main/README.md)**', icon="💻")
         with c3:
             st.info(
                 '**Data: [Kaggle](https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction)**',
